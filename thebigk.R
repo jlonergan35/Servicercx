@@ -71,7 +71,7 @@ all_dat <-  fread(paste("./train/",i,sep = ""))
   model_fitted <- model_spec %>%
     fit(eload ~.,data = train_tbl) 
  model_fitted <-modeltime_calibrate(model_fitted,test_tbl, id = "ID")
-  path <- paste("models1",as.character(unique(all_dat$ID)), sep = "")
+  path <- paste("models",as.character(unique(all_dat$ID)), sep = "")
   mods <-mods %>%bind_rows(model_fitted)
   #setwd("~/Documents/serviceRCX/models1")
   save_h2o_model(model_fitted,path = path)
