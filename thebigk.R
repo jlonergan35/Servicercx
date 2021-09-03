@@ -23,7 +23,7 @@ library(data.table)
 library(doParallel)
 
 #cluster_library(cl, c("dplyr","tidymodels","workflowsets","recipes","h2o","modeltime.h2o","parsnip","timetk"))
-setwd("~/Documents/serviceRCX")
+setwd("~/Documents/serviceRcx")
 files <- list.files("./train/")
 newfiles <- list.files("./test/")
 all_dat <- tibble() #read.csv(paste("./train/",files[1],sep = ""))
@@ -31,9 +31,9 @@ all_dat <- tibble() #read.csv(paste("./train/",files[1],sep = ""))
 mods <- modeltime_table()
 tp <- tibble()
 h2o.init(max_mem_size = "32g")
-foreach(i = files[1:367]) %do% {
+foreach(i = files[1:3]) %do% {
  
-  setwd("~/Documents/serviceRCX")
+  setwd("~/Documents/serviceRcx")
 all_dat <-  fread(paste("./train/",i,sep = ""))
   all_dat$Datetime <- ymd_hms(all_dat$time)
   # %>% group_by(ID) %>% partition(cluster) 
@@ -71,9 +71,9 @@ all_dat <-  fread(paste("./train/",i,sep = ""))
   model_fitted <- model_spec %>%
     fit(eload ~.,data = train_tbl) 
  model_fitted <-modeltime_calibrate(model_fitted,test_tbl, id = "ID")
-  path <- as.character(unique(all_dat$ID))
+  path <- paste("models1",as.character(unique(all_dat$ID)), sep = "")
   mods <-mods %>%bind_rows(model_fitted)
-  setwd("~/Documents/serviceRCX/models")
+  #setwd("~/Documents/serviceRCX/models1")
   save_h2o_model(model_fitted,path = path)
   #all_dat <- all_dat %>% mutate(Datetime=map(time,lubridate::ymd_hms))
  
